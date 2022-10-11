@@ -11,4 +11,24 @@
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="notification_channel_id" translatable="false">dl_channel</string>
+    <string name="notification_channel_name" translatable="true">Download</string>
+    <string name="open" translatable="true">Check status</string>
+    <string name="notification_text" translatable="true">Download is finished.</string>
+    <string name="detail_floating_button_desc">button for additional options</string>
+    <string name="file_name">File name:</string>
+    <string name="status">Status:</string>
+
+    <string-array name="download_options">
+        <item>"Glide - Image Loading Library by BumpTech"</item>
+        <item>"LoadApp - Current repository by Udacity"</item>
+        <item>"Retrofit - Type-safe HTTP client for Android and Java by Square, Inc"</item>
+    </string-array>
+
+    <string-array name="download_urls">
+        <item>"https://github.com/bumptech/glide"</item>
+        <item>"https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"</item>
+        <item>"https://github.com/square/retrofit"</item>
+    </string-array>
+
 </resources>

@@ -1,8 +1,8 @@
 package com.udacity
 
 
-sealed class ButtonState {
-    object Clicked : ButtonState()
-    object Loading : ButtonState()
-    object Completed : ButtonState()
+sealed class ButtonState (val state: String) {
+    object Clicked : ButtonState("Clicked")
+    object Loading : ButtonState("Downloading...")
+    object Completed : ButtonState("Download")
 }
