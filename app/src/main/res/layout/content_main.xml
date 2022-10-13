@@ -31,6 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:buttonColor1="@color/colorPrimary"
         app:buttonColor2="@color/colorPrimaryDark"
-        app:circleColor="@color/colorAccent"/>
+        app:circleColor="@color/colorAccent"
+        app:textColor="#FAFAFA"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

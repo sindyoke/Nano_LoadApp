@@ -24,6 +24,7 @@ class LoadingButton @JvmOverloads constructor(
     private var downloadedColor = 0
     private var notDownloadedColor = 0
     private var circleColor = 0
+    private var textColor = 0
 
     private var pointPosition: Int = 0
     private var textRect = Rect()
@@ -73,6 +74,7 @@ class LoadingButton @JvmOverloads constructor(
             notDownloadedColor = getColor(R.styleable.LoadingButton_buttonColor1, 0)
             downloadedColor = getColor(R.styleable.LoadingButton_buttonColor2, 0)
             circleColor = getColor(R.styleable.LoadingButton_circleColor, 0)
+            textColor = getColor(R.styleable.LoadingButton_textColor, 0)
         }
     }
 
@@ -92,7 +94,7 @@ class LoadingButton @JvmOverloads constructor(
             canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
         }
 
-        paint.color = Color.WHITE
+        paint.color = textColor
         canvas.drawText(
             btnState.state,
             width.toFloat()/2,
