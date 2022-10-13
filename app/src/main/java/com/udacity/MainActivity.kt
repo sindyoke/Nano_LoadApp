@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = "MainActivity"
     private var downloadID: Long = 0
     private var filename = ""
     private var URL = ""
@@ -35,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val items = resources.getStringArray(R.array.download_options)
-        Log.d(TAG, "${items.size} items loaded")
         val itemUrls = resources.getStringArray(R.array.download_urls)
         val radioGroup: RadioGroup = findViewById(R.id.download_options)
 
@@ -90,7 +87,8 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            Log.d(TAG, "Main: downloadId is $id")
+            custom_button.setButtonState(ButtonState.Completed)
+            custom_button.stopAnimation()
             if (id == downloadID) {
                 val notificationManager = context?.let {
                     ContextCompat.getSystemService(
@@ -98,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                         NotificationManager::class.java
                     )
                 } as NotificationManager
-                custom_button.setButtonState(ButtonState.Completed)
                 notificationManager.sendNotification(
                     getText(R.string.notification_text).toString(),
                     context,

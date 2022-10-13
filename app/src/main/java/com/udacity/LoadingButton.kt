@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.toRectF
 import kotlin.properties.Delegates
 
 class LoadingButton @JvmOverloads constructor(
@@ -25,11 +26,13 @@ class LoadingButton @JvmOverloads constructor(
     private var circleColor = 0
 
     private var pointPosition: Int = 0
+    private var textRect = Rect()
+    private var circleRect = Rect()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
-        textSize = 55.0f
+        textSize = 40f
         typeface = Typeface.create("", Typeface.BOLD)
     }
 
@@ -38,11 +41,12 @@ class LoadingButton @JvmOverloads constructor(
     private var btnState: ButtonState by Delegates.observable(ButtonState.Completed) { p, old, new ->
         when (new) {
             ButtonState.Clicked -> {
-                Log.d(TAG, "download started")
+                Log.d(TAG, "button clicked")
             }
 
             ButtonState.Loading -> {
                 Log.d(TAG, "downloading")
+                valueAnimator.cancel()
                 valueAnimator = ValueAnimator.ofInt(0, 360).setDuration(2000)
                     .apply {
                         addUpdateListener {
@@ -76,14 +80,24 @@ class LoadingButton @JvmOverloads constructor(
         super.onDraw(canvas)
         paint.color = notDownloadedColor
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        paint.color = Color.WHITE
-        paint.textSize = 40f
-        canvas.drawText(btnState.state, width / 2 - 20f, height / 2 + 15f, paint)
 
         if (btnState == ButtonState.Loading) {
             paint.color = downloadedColor
             canvas.drawRect(0f, 0f, width * pointPosition / 360f, height.toFloat(), paint)
+
+            paint.color = circleColor
+            canvas.drawArc(circleRect.toRectF(), -90f, pointPosition.toFloat(), true, paint)
+        } else {
+            paint.color = notDownloadedColor
+            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
         }
+
+        paint.color = Color.WHITE
+        canvas.drawText(
+            btnState.state,
+            width.toFloat()/2,
+            height.toFloat()/2 - (paint.descent() + paint.ascent())/2,
+            paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -99,6 +113,17 @@ class LoadingButton @JvmOverloads constructor(
         setMeasuredDimension(w, h)
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        paint.getTextBounds(ButtonState.Loading.state, 0, ButtonState.Loading.state.length, textRect)
+        circleRect = Rect(
+            width/2 + textRect.width()/2 + 15,
+            height/2 - textRect.height()/2,
+            width/2 + textRect.width()/2 + 15 + textRect.height(),
+            height/2 + textRect.height()/2
+        )
+    }
+
     override fun performClick(): Boolean {
         btnState = ButtonState.Loading
         invalidate()
@@ -107,5 +132,10 @@ class LoadingButton @JvmOverloads constructor(
 
     fun setButtonState(buttonState: ButtonState) {
         btnState = buttonState
+        invalidate()
+    }
+
+    fun stopAnimation() {
+        valueAnimator.cancel()
     }
 }
